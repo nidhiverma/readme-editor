@@ -23,7 +23,7 @@ export const Header = () => {
         </svg>
         <h1 className='text-2xl font-bold text-gray-900'>Readme Editor</h1>
       </div>
-      <button className='py-2 px-4 rounded-md outline-none md:bg-blue-500 md:hover:bg-blue-700 text-white'>
+      <button className='py-2 px-4 rounded-md focus:outline-none outline-none md:bg-blue-500 md:hover:bg-blue-700 text-white'>
         Download
       </button>
     </header>

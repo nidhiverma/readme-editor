@@ -55,13 +55,13 @@ function App() {
         </div>
         <div className='col-span-2'>
           <button
-            className='py-4 text-blue-500 font-semibold outline-none cursor-pointer'
+            className='py-4 text-blue-500 font-semibold focus:outline-none outline-none hover:text-blue-700 cursor-pointer'
             onClick={() => setTogglePreview(true)}
           >
             Preview
           </button>
           <button
-            className='pl-4 py-4 text-gray-500 font-semibold outline-none cursor-pointer'
+            className='pl-4 py-4 text-gray-500 font-semibold focus:outline-none outline-none hover:text-gray-700 cursor-pointer'
             onClick={() => setTogglePreview(false)}
           >
             Raw
