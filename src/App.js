@@ -9,9 +9,11 @@ function App() {
     sectionsArray: [],
     output: '',
     sections: [],
+    focusedSection: null,
   };
 
   const [togglePreview, setTogglePreview] = useState(true);
+
   function stateReducer(state, action) {
     switch (action.type) {
       case 'updateValue':
@@ -24,6 +26,16 @@ function App() {
           ...state,
           sectionsArray: [...state.sectionsArray, state.value],
         };
+      case 'updateCustomInput':
+        console.log('update custom input');
+        let index = state.sections.findIndex(
+          (section) => section === state.focusedSection
+        );
+        console.log(index);
+        return {
+          ...state,
+          sectionsArray: state.sectionsArray.splice(index, 1, state.value),
+        };
       case 'updateOutput':
         return {
           ...state,
@@ -34,6 +46,11 @@ function App() {
           ...state,
           sections: [...state.sections, action.payload],
         };
+      case 'setFocusedSection':
+        return {
+          ...state,
+          focusedSection: action.payload,
+        };
       default:
         throw new Error();
     }
@@ -41,6 +58,13 @@ function App() {
 
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
+  // const sections = [
+  //   'documentation',
+  //   'acknowledgements',
+  //   'contributing',
+  //   'apiReference',
+  //   'liscense',
+  // ];
   useEffect(() => {
     console.log(state);
   }, [state]);
@@ -79,11 +103,14 @@ function App() {
                     type: 'updateValue',
                     payload: templateStrings.documentation,
                   });
-
                   dispatch({ type: 'updateArray' });
                   dispatch({ type: 'updateOutput' });
                   dispatch({
                     type: 'updateSections',
+                    payload: 'documentation',
+                  });
+                  dispatch({
+                    type: 'setFocusedSection',
                     payload: 'documentation',
                   });
                 }}
@@ -105,6 +132,10 @@ function App() {
                     type: 'updateSections',
                     payload: 'contributing',
                   });
+                  dispatch({
+                    type: 'setFocusedSection',
+                    payload: 'contributing',
+                  });
                 }}
               >
                 Contributing
@@ -118,10 +149,15 @@ function App() {
                     type: 'updateValue',
                     payload: templateStrings.apiReference,
                   });
+
                   dispatch({ type: 'updateArray' });
                   dispatch({ type: 'updateOutput' });
                   dispatch({
                     type: 'updateSections',
+                    payload: 'apiReference',
+                  });
+                  dispatch({
+                    type: 'setFocusedSection',
                     payload: 'apiReference',
                   });
                 }}
@@ -143,6 +179,10 @@ function App() {
                     type: 'updateSections',
                     payload: 'acknowledgements',
                   });
+                  dispatch({
+                    type: 'setFocusedSection',
+                    payload: 'acknowledgements',
+                  });
                 }}
               >
                 Acknowledgements
@@ -161,6 +201,10 @@ function App() {
                   });
                   dispatch({ type: 'updateOutput' });
                   dispatch({ type: 'updateSections', payload: 'license' });
+                  dispatch({
+                    type: 'setFocusedSection',
+                    payload: 'license',
+                  });
                 }}
               >
                 License
@@ -177,6 +221,10 @@ function App() {
                   dispatch({ type: 'updateArray' });
                   dispatch({ type: 'updateOutput' });
                   dispatch({ type: 'updateSections', payload: 'appendix' });
+                  dispatch({
+                    type: 'setFocusedSection',
+                    payload: 'appendix',
+                  });
                 }}
               >
                 Appendix
@@ -190,12 +238,11 @@ function App() {
             autoFocus
             rows={20}
             value={state.value}
-            onChange={(e) =>
-              dispatch(
-                { type: 'updateValue', payload: e.target.value },
-                { type: 'updateArray' }
-              )
-            }
+            onChange={(e) => {
+              dispatch({ type: 'updateValue', payload: e.target.value });
+              dispatch({ type: 'updateCustomInput' });
+              dispatch({ type: 'updateOutput' });
+            }}
           />
         </div>
         <div className='col-span-2 h-11/12 mr-8'>
@@ -207,9 +254,9 @@ function App() {
           ) : (
             <div className='p-8 rounded-md w-full h-3/4 border-2 border-gray-200 overflow-y-scroll'>
               {state.sectionsArray.map((section, key) => (
-                <div className='pb-4'>
-                  {section.split('\n').map((s) => (
-                    <p>{s}</p>
+                <div className='pb-4' key={key}>
+                  {section.split('\n').map((line) => (
+                    <p>{line}</p>
                   ))}
                   <br />
                 </div>
