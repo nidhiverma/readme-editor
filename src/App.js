@@ -12,6 +12,13 @@ function App() {
     focusedSection: null,
   };
 
+  const sectionTitles = {
+    documentation: 'Documentation',
+    acknowledgements: 'Acknowledgements',
+    contributing: 'Contributing',
+    apiReference: 'API Reference',
+    liscense: 'License',
+  };
   const [togglePreview, setTogglePreview] = useState(true);
 
   function stateReducer(state, action) {
@@ -27,11 +34,10 @@ function App() {
           sectionsArray: [...state.sectionsArray, state.value],
         };
       case 'updateCustomInput':
-        console.log('update custom input');
         let index = state.sections.findIndex(
           (section) => section === state.focusedSection
         );
-        console.log(index);
+
         return {
           ...state,
           sectionsArray: state.sectionsArray.splice(index, 1, state.value),
@@ -58,13 +64,6 @@ function App() {
 
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
-  // const sections = [
-  //   'documentation',
-  //   'acknowledgements',
-  //   'contributing',
-  //   'apiReference',
-  //   'liscense',
-  // ];
   useEffect(() => {
     console.log(state);
   }, [state]);
@@ -95,141 +94,31 @@ function App() {
       <div className='grid grid-cols-5 gap-4'>
         <div className='flex w-full h-3/4 px-8 pt-4 overflow-y-scroll'>
           <ul className='list-none space-y-4 w-full h-full'>
-            <li>
-              <button
-                className='bg-white px-4 py-2 w-full shadow cursor-pointer rounded-md'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.documentation,
-                  });
-                  dispatch({ type: 'updateArray' });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({
-                    type: 'updateSections',
-                    payload: 'documentation',
-                  });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'documentation',
-                  });
-                }}
-              >
-                Documentation
-              </button>
-            </li>
-            <li>
-              <button
-                className='bg-white px-4 py-2 w-full shadow rounded-md cursor-pointer'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.contributing,
-                  });
-                  dispatch({ type: 'updateArray' });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({
-                    type: 'updateSections',
-                    payload: 'contributing',
-                  });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'contributing',
-                  });
-                }}
-              >
-                Contributing
-              </button>
-            </li>
-            <li>
-              <button
-                className='bg-white px-4 py-2 w-full shadow rounded-md cursor-pointer'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.apiReference,
-                  });
-
-                  dispatch({ type: 'updateArray' });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({
-                    type: 'updateSections',
-                    payload: 'apiReference',
-                  });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'apiReference',
-                  });
-                }}
-              >
-                API Reference
-              </button>
-            </li>
-            <li>
-              <button
-                className='bg-white px-4 py-2 w-full shadow rounded-md cursor-pointer'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.acknowledgements,
-                  });
-                  dispatch({ type: 'updateArray' });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({
-                    type: 'updateSections',
-                    payload: 'acknowledgements',
-                  });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'acknowledgements',
-                  });
-                }}
-              >
-                Acknowledgements
-              </button>
-            </li>
-            <li>
-              <button
-                className='bg-white shadow px-4 py-2 w-full rounded-md cursor-pointer'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.license,
-                  });
-                  dispatch({
-                    type: 'updateArray',
-                  });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({ type: 'updateSections', payload: 'license' });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'license',
-                  });
-                }}
-              >
-                License
-              </button>
-            </li>
-            <li>
-              <button
-                className='bg-white px-4 py-2 w-full shadow rounded-md cursor-pointer'
-                onClick={() => {
-                  dispatch({
-                    type: 'updateValue',
-                    payload: templateStrings.appendix,
-                  });
-                  dispatch({ type: 'updateArray' });
-                  dispatch({ type: 'updateOutput' });
-                  dispatch({ type: 'updateSections', payload: 'appendix' });
-                  dispatch({
-                    type: 'setFocusedSection',
-                    payload: 'appendix',
-                  });
-                }}
-              >
-                Appendix
-              </button>
-            </li>
+            {Object.keys(sectionTitles).map((key) => (
+              <li>
+                <button
+                  className='bg-white px-4 py-2 w-full shadow cursor-pointer rounded-md'
+                  onClick={() => {
+                    dispatch({
+                      type: 'updateValue',
+                      payload: templateStrings[key],
+                    });
+                    dispatch({ type: 'updateArray' });
+                    dispatch({ type: 'updateOutput' });
+                    dispatch({
+                      type: 'updateSections',
+                      payload: key,
+                    });
+                    dispatch({
+                      type: 'setFocusedSection',
+                      payload: key,
+                    });
+                  }}
+                >
+                  {sectionTitles[key]}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
         <div className='col-span-2 h-11/12'>
