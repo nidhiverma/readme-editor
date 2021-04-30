@@ -1,6 +1,20 @@
 import React from 'react';
+import rawMarkdown from './utils/rawMarkdown';
 
-export const Header = () => {
+export const Header = ({ markdown }) => {
+  const downloadReadme = () => {
+    const element = document.createElement('a');
+    const content = rawMarkdown(markdown);
+
+    const file = new Blob([content], {
+      type: 'text/plain',
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = 'README.md';
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+  console.log(markdown);
   return (
     <header className='lg:pl-8 lg:pr-16 pr-8 pl-4 bg-white shadow flex flex-wrap items-center justify-between'>
       <div className='py-6 sm:px-6 flex flex-wrap items-center justify-center'>
@@ -23,9 +37,22 @@ export const Header = () => {
         </svg>
         <h1 className='text-2xl font-bold text-gray-900'>Readme Editor</h1>
       </div>
-      <button className='py-2 px-4 rounded-md focus:outline-none outline-none md:bg-blue-600 md:hover:bg-blue-700 text-white'>
-        Download
-      </button>
+      {markdown.length === 0 ? (
+        <button
+          className='py-2 px-4 rounded-md disabled:opacity-60 md:bg-gray-600 text-white'
+          disabled
+        >
+          Download
+        </button>
+      ) : (
+        <button
+          className='py-2 px-4 rounded-md disabled:opacity-50 focus:outline-none outline-none md:bg-blue-600 md:hover:bg-blue-700 text-white'
+          disabled={markdown.length === 0}
+          onClick={() => downloadReadme()}
+        >
+          Download
+        </button>
+      )}
     </header>
   );
 };

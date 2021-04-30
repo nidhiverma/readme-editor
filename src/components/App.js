@@ -1,7 +1,9 @@
 import { Fragment, useReducer, useEffect, useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import { Header } from './Header';
 import templateStrings from '../templateStrings';
 import stateReducer from '../reducer/reducer';
+import rawMarkdown from './utils/rawMarkdown';
 
 function App() {
   const initialState = {
@@ -13,102 +15,149 @@ function App() {
   };
 
   const sectionTitles = {
+    titleAndDescription: 'Title and Description',
     documentation: 'Documentation',
     acknowledgements: 'Acknowledgements',
     contributing: 'Contributing',
     apiReference: 'API Reference',
-    liscense: 'License',
+    license: 'License',
   };
+
   const [togglePreview, setTogglePreview] = useState(true);
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   useEffect(() => {
     console.log(state);
   }, [state]);
+
   return (
-    <Fragment className='overflow-y-hidden'>
-      <div className='grid grid-cols-5 gap-4 pt-2'>
-        <div className='pl-8'>
-          <h4 className='py-4 text-blue-600 font-semibold'>Sections</h4>
+    <Fragment>
+      <Header markdown={state.sectionsArray} />
+      <div className='flex pt-6 px-6'>
+        <div className='w-80'>
+          <h3 className='text-blue-600 font-semibold'>Sections</h3>
+          <h4 className=' text-xs leading-6 text-gray-900'>
+            Click on a section below to edit the contents
+          </h4>
         </div>
-        <div className='col-span-2'>
-          <h4 className='py-4 text-blue-600 font-semibold'>Editor</h4>
-        </div>
-        <div className='col-span-2'>
-          <button
-            className='py-4 text-blue-600 font-semibold focus:outline-none outline-none hover:text-blue-700 cursor-pointer'
-            onClick={() => setTogglePreview(true)}
-          >
-            Preview
-          </button>
-          <button
-            className='pl-4 py-4 text-gray-500 font-semibold focus:outline-none outline-none hover:text-gray-700 cursor-pointer'
-            onClick={() => setTogglePreview(false)}
-          >
-            Raw
-          </button>
+        <div className='flex flex-1'>
+          <div className='w-1/2 px-3'>
+            <h3 className='text-blue-600 font-semibold'>Editor</h3>
+          </div>
+          <div className='px-3'>
+            <button
+              className='text-blue-600 text-initial font-semibold focus:outline-none outline-none hover:text-blue-700 cursor-pointer'
+              onClick={() => setTogglePreview(true)}
+            >
+              Preview
+            </button>
+            <button
+              className='pl-3 text-gray-500 font-semibold focus:outline-none outline-none hover:text-gray-700 cursor-pointer'
+              onClick={() => setTogglePreview(false)}
+            >
+              Raw
+            </button>
+          </div>
         </div>
       </div>
-      <div className='grid grid-cols-5 gap-4 h-3/4'>
-        <div className='flex w-full h-3/4 px-8 pt-4 overflow-y-scroll'>
-          <ul className='list-none space-y-4 w-full h-full'>
-            {Object.keys(sectionTitles).map((key, id) => (
-              <li key={id}>
-                <button
-                  className='bg-white px-4 py-2 w-full shadow cursor-pointer rounded-md'
-                  onClick={() => {
-                    dispatch({
-                      type: 'updateValue',
-                      payload: templateStrings[key],
-                    });
-                    dispatch({ type: 'updateArray' });
-                    dispatch({ type: 'updateOutput' });
-                    dispatch({
-                      type: 'updateSections',
-                      payload: key,
-                    });
-                    dispatch({
-                      type: 'setFocusedSection',
-                      payload: key,
-                    });
-                  }}
+      <div className='flex p-6'>
+        <div className='sections w-80'>
+          <div className='px-3 pr-4 overflow-y-scroll full-screen'>
+            <ul className='mt-4 mb-12 space-y-3'>
+              {Object.keys(sectionTitles)
+                .sort()
+                .map((key, id) => (
+                  <li key={id}>
+                    <div
+                      className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400'
+                      onClick={() => {
+                        dispatch({
+                          type: 'setFocusedSection',
+                          payload: key,
+                        });
+                        let index = state.sections.indexOf(key);
+
+                        if (index === -1) {
+                          dispatch({
+                            type: 'updateValue',
+                            payload: templateStrings[key],
+                          });
+                          dispatch({
+                            type: 'addSection',
+                          });
+                          dispatch({ type: 'updateOutput' });
+                        }
+                      }}
+                    >
+                      <span>{sectionTitles[key]}</span>
+                      {state.sections.includes(key) && (
+                        <button
+                          className='focus:outline-none outline-none w-1/3'
+                          onClick={() => {
+                            let index = state.sections.indexOf(key);
+                            console.log(index);
+                            dispatch({
+                              type: 'removeSection',
+                              payload: index,
+                            });
+                            dispatch({
+                              type: 'updateOutput',
+                            });
+                          }}
+                        >
+                          <i className='fas fa-trash'></i>
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </div>
+        <div className='flex flex-1 w-100'>
+          <div className='w-1/2 px-3 full-screen'>
+            <section
+              style={{
+                display: 'flex',
+                position: 'relative',
+                textAlign: 'initial',
+                width: '100%',
+                height: '70vh',
+              }}
+              className='rounded-sm border border-gray-500'
+            >
+              <textarea
+                className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
+                style={{ height: '70vh', width: '100%' }}
+                value={state.value}
+                onChange={(e) => {
+                  dispatch({ type: 'updateValue', payload: e.target.value });
+                  dispatch({ type: 'updateCustomInput' });
+                  dispatch({ type: 'updateOutput' });
+                }}
+              />
+            </section>
+          </div>
+          <div className='px-3 flex-1'>
+            <div
+              style={{ height: '70vh', width: '100%' }}
+              className='border border-gray-500 rounded-md p-6 preview bg-white full-screen overflow-y-scroll w-full'
+            >
+              {togglePreview === true ? (
+                <MDEditor.Markdown
+                  source={state.output}
+                  className='full-screen'
+                />
+              ) : (
+                <p
+                  className='full-screen w-full p-4'
+                  style={{ height: '70vh' }}
                 >
-                  {sectionTitles[key]}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='col-span-2 h-11/12'>
-          <textarea
-            className='bg-black text-white font-mono text-sm p-8 overflow-y-scroll w-full'
-            autoFocus
-            rows={20}
-            value={state.value}
-            onChange={(e) => {
-              dispatch({ type: 'updateValue', payload: e.target.value });
-              dispatch({ type: 'updateCustomInput' });
-              dispatch({ type: 'updateOutput' });
-            }}
-          />
-        </div>
-        <div className='col-span-2 h-3/4 mr-8'>
-          {togglePreview === true ? (
-            <MDEditor.Markdown
-              source={state.output}
-              className='p-8 rounded-md w-full h-1/3 border-2 border-gray-200 overflow-y-scroll'
-            />
-          ) : (
-            <div className='p-8 rounded-md w-full h-1/3 border-2 border-gray-200 font-mono text-sm overflow-y-scroll'>
-              {state.sectionsArray.map((section, key) => (
-                <div className='pb-4' key={key}>
-                  {section.split('\n').map((line) => (
-                    <p>{line}</p>
-                  ))}
-                </div>
-              ))}
+                  {rawMarkdown(state.sectionsArray)}
+                </p>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </Fragment>
