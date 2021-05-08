@@ -167,12 +167,22 @@ function App() {
                   className='full-screen'
                 />
               ) : (
-                <p
+                <div
                   className='full-screen w-full p-4'
                   style={{ height: '70vh' }}
                 >
-                  {rawMarkdown(state.sectionsArray)}
-                </p>
+                  {state.sectionsArray.map((section, idx) => (
+                    <div key={idx}>
+                      {section.split('\n').map((line, idx) => (
+                        <p key={idx}>
+                          {line}
+                          <br />
+                        </p>
+                      ))}
+                      <br />
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>

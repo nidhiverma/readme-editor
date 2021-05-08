@@ -17,6 +17,7 @@ A brief description of what this project does and who it's for`,
 
 `,
   contributing: `## Contributing
+
 To contribute to <project_name>, follow these steps:
 
 1. Fork this repository.
@@ -27,7 +28,9 @@ To contribute to <project_name>, follow these steps:
 
 Alternatively see the GitHub documentation on [creating a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).`,
 
-  contributors: `Thanks to the following people who have contributed to this project:
+  contributors: `## Contributors
+
+Thanks to the following people who have contributed to this project:
 
 * [@nidhiverma1997](https://github.com/nidhiverma1997) 📖`,
 
@@ -61,7 +64,8 @@ Takes two numbers and returns the sum.
 
   appendix: `## Appendix
 
-Any additional information goes here`,
+Any additional information goes here
+`,
 
   license: `## License
 
