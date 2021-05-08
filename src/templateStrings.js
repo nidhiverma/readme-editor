@@ -2,6 +2,7 @@ const strings = {
   titleAndDescription: `# Project Title
 
 A brief description of what this project does and who it's for`,
+
   documentation: `## Documentation
 [Documentation](https://linktodocumentation)
   `,
@@ -14,14 +15,22 @@ A brief description of what this project does and who it's for`,
 
  - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
 
-  `,
+`,
   contributing: `## Contributing
+To contribute to <project_name>, follow these steps:
 
-Contributions are always welcome!
+1. Fork this repository.
+2. Create a branch: git checkout -b <branch_name>.
+3. Make your changes and commit them: \`\`\`git commit -m <commit_message>\`\`\`
+4. Push to the original branch: \`\`\`git push origin <project_name>/<location>\`\`\`
+5. Create the pull request.
 
-See \`contributing.md\` for ways to get started.
+Alternatively see the GitHub documentation on [creating a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).`,
 
-Please adhere to this project's \`code of conduct\`.`,
+  contributors: `Thanks to the following people who have contributed to this project:
+
+* [@nidhiverma1997](https://github.com/nidhiverma1997) 📖`,
+
   apiReference: `## API Reference
   
 #### Get all items
@@ -49,12 +58,48 @@ Please adhere to this project's \`code of conduct\`.`,
 Takes two numbers and returns the sum.
 
   `,
+
   appendix: `## Appendix
 
 Any additional information goes here`,
+
   license: `## License
 
 [MIT](https://choosealicense.com/licenses/mit/)`,
+
+  badges: `## Badges
+
+Get custom/regularly used shields(badges) for your repository from: [shields.io](https://shields.io/)
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+
+  `,
+
+  contact: `## Contact
+If you want to contact me you can reach me at <name@example.com>.`,
+
+  installation: `## Installation
+
+\`\`\`
+npx create-react-app my-app
+cd my-app
+npm start
+\`\`\`
+`,
+  features: `## Features
+
+- Live previews
+- Add section
+- Remove Section
+- Update Section
+- Download Readme`,
+
+  screenshots: `# Screenshots
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)`,
+
+  logo: `![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)`,
 };
 
 export default strings;

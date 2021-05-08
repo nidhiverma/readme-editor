@@ -20,7 +20,15 @@ function App() {
     acknowledgements: 'Acknowledgements',
     contributing: 'Contributing',
     apiReference: 'API Reference',
+    features: 'Features',
+    logo: 'Logo',
+    screenshots: 'Screenshots',
     license: 'License',
+    badges: 'Badges',
+    contact: 'Contact',
+    installation: 'Installation',
+    appendix: 'Appendix',
+    contributors: 'Contributors',
   };
 
   const [togglePreview, setTogglePreview] = useState(true);
@@ -61,38 +69,48 @@ function App() {
         </div>
       </div>
       <div className='flex p-6'>
-        <div className='sections w-80'>
-          <div className='px-3 pr-4 overflow-y-scroll full-screen'>
+        <div className='sections w-80' style={{ height: '70vh' }}>
+          <div
+            className='px-3 pr-4 overflow-y-auto full-screen'
+            style={{ height: '70vh' }}
+          >
             <ul className='mt-4 mb-12 space-y-3'>
               {Object.keys(sectionTitles)
                 .sort()
                 .map((key, id) => (
                   <li key={id}>
-                    <div
-                      className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400'
-                      onClick={() => {
-                        dispatch({
-                          type: 'setFocusedSection',
-                          payload: key,
-                        });
-                        let index = state.sections.indexOf(key);
+                    <div className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400'>
+                      <span
+                        className='w-3/4'
+                        onClick={() => {
+                          dispatch({
+                            type: 'setFocusedSection',
+                            payload: key,
+                          });
+                          let index = state.sections.indexOf(key);
 
-                        if (index === -1) {
-                          dispatch({
-                            type: 'updateValue',
-                            payload: templateStrings[key],
-                          });
-                          dispatch({
-                            type: 'addSection',
-                          });
-                          dispatch({ type: 'updateOutput' });
-                        }
-                      }}
-                    >
-                      <span>{sectionTitles[key]}</span>
+                          if (index === -1) {
+                            dispatch({
+                              type: 'updateValue',
+                              payload: templateStrings[key],
+                            });
+                            dispatch({
+                              type: 'addSection',
+                            });
+                            dispatch({ type: 'updateOutput' });
+                          } else {
+                            dispatch({
+                              type: 'updateValue',
+                              payload: templateStrings[key],
+                            });
+                          }
+                        }}
+                      >
+                        {sectionTitles[key]}
+                      </span>
                       {state.sections.includes(key) && (
                         <button
-                          className='focus:outline-none outline-none w-1/3'
+                          className='focus:outline-none outline-none w-1/4'
                           onClick={() => {
                             let index = state.sections.indexOf(key);
                             console.log(index);
@@ -132,7 +150,7 @@ function App() {
                 value={state.value}
                 onChange={(e) => {
                   dispatch({ type: 'updateValue', payload: e.target.value });
-                  dispatch({ type: 'updateCustomInput' });
+                  dispatch({ type: 'updateSection' });
                   dispatch({ type: 'updateOutput' });
                 }}
               />

@@ -28,11 +28,13 @@ export default function stateReducer(state, action) {
           ...state.sections.slice(action.payload + 1),
         ],
       };
-    case 'updateCustomInput':
+    case 'updateSection':
       let index = state.sections.indexOf(state.focusedSection);
+      let arr = state.sectionsArray.slice(0, index);
+      arr.push(state.value);
       return {
         ...state,
-        sectionsArray: state.sectionsArray.splice(index, 1, state.value),
+        sectionsArray: [...arr, ...state.sectionsArray.slice(index + 1)],
       };
     case 'updateOutput':
       return {
