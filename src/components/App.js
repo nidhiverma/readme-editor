@@ -3,7 +3,6 @@ import MDEditor from '@uiw/react-md-editor';
 import { Header } from './Header';
 import templateStrings from '../templateStrings';
 import stateReducer from '../reducer/reducer';
-import rawMarkdown from './utils/rawMarkdown';
 
 function App() {
   const initialState = {
