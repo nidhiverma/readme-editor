@@ -136,12 +136,12 @@ function App() {
                 height: '70vh',
               }}
             >
-              {state.focusedSection === null && (
+              {state.sections.length === 0 && (
                 <p className='mx-auto text-blue-500 text-center'>
                   Select a section from the left sidebar to edit the contents{' '}
                 </p>
               )}
-              {state.focusedSection && (
+              {state.sections.length > 0 && (
                 <textarea
                   className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
                   style={{ height: '70vh', width: '100%' }}
