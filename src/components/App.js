@@ -1,4 +1,4 @@
-import { Fragment, useReducer, useEffect, useState } from 'react';
+import { Fragment, useReducer, useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import { Header } from './Header';
 import templateStrings from '../templateStrings';
@@ -33,10 +33,6 @@ function App() {
   const [togglePreview, setTogglePreview] = useState(true);
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   return (
     <Fragment>
       <Header markdown={state.sectionsArray} />
@@ -68,7 +64,7 @@ function App() {
         </div>
       </div>
       <div className='flex p-6'>
-        <div className='sections w-80' style={{ height: '70vh' }}>
+        <div className='sections w-60' style={{ height: '70vh' }}>
           <div
             className='px-3 pr-4 overflow-y-auto full-screen'
             style={{ height: '70vh' }}
@@ -78,41 +74,39 @@ function App() {
                 .sort()
                 .map((key, id) => (
                   <li key={id}>
-                    <div className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400'>
-                      <span
-                        className='w-3/4'
-                        onClick={() => {
-                          dispatch({
-                            type: 'setFocusedSection',
-                            payload: key,
-                          });
-                          let index = state.sections.indexOf(key);
+                    <div
+                      className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none'
+                      onClick={() => {
+                        dispatch({
+                          type: 'setFocusedSection',
+                          payload: key,
+                        });
+                        let index = state.sections.indexOf(key);
 
-                          if (index === -1) {
-                            dispatch({
-                              type: 'updateValue',
-                              payload: templateStrings[key],
-                            });
-                            dispatch({
-                              type: 'addSection',
-                            });
-                            dispatch({ type: 'updateOutput' });
-                          } else {
-                            dispatch({
-                              type: 'updateValue',
-                              payload: templateStrings[key],
-                            });
-                          }
-                        }}
-                      >
-                        {sectionTitles[key]}
-                      </span>
+                        if (index === -1) {
+                          dispatch({
+                            type: 'updateValue',
+                            payload: templateStrings[key],
+                          });
+                          dispatch({
+                            type: 'addSection',
+                          });
+                          dispatch({ type: 'updateOutput' });
+                        } else {
+                          dispatch({
+                            type: 'updateValue',
+                            payload: templateStrings[key],
+                          });
+                        }
+                      }}
+                    >
+                      <span>{sectionTitles[key]}</span>
                       {state.sections.includes(key) && (
                         <button
-                          className='focus:outline-none outline-none w-1/4'
+                          className='focus:outline-none outline-none'
                           onClick={() => {
                             let index = state.sections.indexOf(key);
-                            console.log(index);
+
                             dispatch({
                               type: 'removeSection',
                               payload: index,
@@ -141,10 +135,9 @@ function App() {
                 width: '100%',
                 height: '70vh',
               }}
-              // className='rounded-sm border border-gray-500'
             >
               {state.focusedSection === null && (
-                <p className='text-blue-700 text-center'>
+                <p className='mx-auto text-blue-500 text-center'>
                   Select a section from the left sidebar to edit the contents{' '}
                 </p>
               )}

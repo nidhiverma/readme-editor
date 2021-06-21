@@ -14,9 +14,9 @@ export const Header = ({ markdown }) => {
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
-  console.log(markdown);
+
   return (
-    <header className='lg:pl-8 lg:pr-16 pr-8 pl-4 bg-white shadow flex flex-wrap items-center justify-between'>
+    <header className='lg:pl-8 lg:pr-16 pr-8 pl-4 bg-gray-900 shadow flex flex-wrap items-center justify-between'>
       <div className='py-6 sm:px-6 flex flex-wrap items-center justify-center'>
         <svg
           className='fill-current text-blue-500 mr-2'
@@ -35,7 +35,7 @@ export const Header = ({ markdown }) => {
             <path d='m286 392h-120c-8.284 0-15 6.716-15 15s6.716 15 15 15h120c8.284 0 15-6.716 15-15s-6.716-15-15-15z' />
           </g>
         </svg>
-        <h1 className='text-2xl font-bold text-gray-900'>Readme Editor</h1>
+        <h1 className='text-2xl font-semibold text-white'>Readme Editor</h1>
       </div>
       {markdown.length === 0 ? (
         <button
