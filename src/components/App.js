@@ -36,15 +36,13 @@ function App() {
   return (
     <Fragment>
       <Header markdown={state.sectionsArray} />
+      {/* section headers */}
       <div className='flex pt-6 px-6 gap-10'>
         <div className='w-60'>
           <h3 className='text-blue-600 font-semibold'>Sections</h3>
-          <h4 className=' text-xs leading-6 text-gray-900'>
-            Click on a section below to edit the contents
-          </h4>
         </div>
         <div className='flex flex-1'>
-          <div className='w-1/2'>
+          <div className='w-1/2 px-3'>
             <h3 className='text-blue-600 font-semibold'>Editor</h3>
           </div>
           <div className='px-3'>
@@ -63,45 +61,43 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='flex p-6 gap-10'>
-        <div className='sections w-60' style={{ height: '70vh' }}>
-          <div
-            className='px-3 pr-4 overflow-y-auto full-screen'
-            style={{ height: '70vh' }}
-          >
+
+      {/* section content */}
+      <div className='flex p-6 gap-10 align-center'>
+        <div
+          className='sections w-60 overflow-y-auto full-screen'
+          style={{ height: '75vh' }}
+        >
+          {/* selected sections */}
+          <div className='pr-3'>
+            {state.sections.length > 0 && (
+              <h4 className=' text-xs leading-6 text-gray-900'>
+                Click on a section below to edit the contents
+              </h4>
+            )}
             <ul className='mt-4 mb-12 space-y-3'>
               {Object.keys(sectionTitles)
                 .sort()
                 .map((key, id) => (
                   <li key={id}>
-                    <div
-                      className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none'
-                      onClick={() => {
-                        dispatch({
-                          type: 'setFocusedSection',
-                          payload: key,
-                        });
-                        let index = state.sections.indexOf(key);
+                    {state.sections.includes(key) && (
+                      <div
+                        className={`flex flex-wrap justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer ml-1 ${
+                          state.focusedSection === key ? 'ring-2' : ''
+                        }`}
+                        onClick={() => {
+                          dispatch({
+                            type: 'setFocusedSection',
+                            payload: key,
+                          });
+                          dispatch({
+                            type: 'updateValue',
+                            payload: templateStrings[key],
+                          });
+                        }}
+                      >
+                        <span>{sectionTitles[key]}</span>
 
-                        if (index === -1) {
-                          dispatch({
-                            type: 'updateValue',
-                            payload: templateStrings[key],
-                          });
-                          dispatch({
-                            type: 'addSection',
-                          });
-                          dispatch({ type: 'updateOutput' });
-                        } else {
-                          dispatch({
-                            type: 'updateValue',
-                            payload: templateStrings[key],
-                          });
-                        }
-                      }}
-                    >
-                      <span>{sectionTitles[key]}</span>
-                      {state.sections.includes(key) && (
                         <button
                           className='focus:outline-none outline-none'
                           onClick={() => {
@@ -118,13 +114,60 @@ function App() {
                         >
                           <i className='fas fa-trash'></i>
                         </button>
-                      )}
-                    </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+            </ul>
+          </div>
+
+          {/* sections list */}
+          <h4 className=' text-xs leading-6 text-gray-900'>
+            Click on a section below to add it to readme
+          </h4>
+          <div className='pr-3 pr-4 '>
+            <ul className='mt-4 mb-12 space-y-3'>
+              {Object.keys(sectionTitles)
+                .sort()
+                .map((key, id) => (
+                  <li key={id}>
+                    {!state.sections.includes(key) && (
+                      <div
+                        className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none bg-gray-100 ml-1 text-gray'
+                        onClick={() => {
+                          dispatch({
+                            type: 'setFocusedSection',
+                            payload: key,
+                          });
+                          let index = state.sections.indexOf(key);
+
+                          if (index === -1) {
+                            dispatch({
+                              type: 'updateValue',
+                              payload: templateStrings[key],
+                            });
+                            dispatch({
+                              type: 'addSection',
+                            });
+                            dispatch({ type: 'updateOutput' });
+                          } else {
+                            dispatch({
+                              type: 'updateValue',
+                              payload: templateStrings[key],
+                            });
+                          }
+                        }}
+                      >
+                        <span>{sectionTitles[key]}</span>
+                      </div>
+                    )}
                   </li>
                 ))}
             </ul>
           </div>
         </div>
+
+        {/* markdown editor */}
         <div className='flex flex-1 w-100'>
           <div className='w-1/2 px-3 full-screen'>
             <section
@@ -133,7 +176,7 @@ function App() {
                 position: 'relative',
                 textAlign: 'initial',
                 width: '100%',
-                height: '70vh',
+                height: '75vh',
               }}
             >
               {state.sections.length === 0 && (
@@ -144,7 +187,7 @@ function App() {
               {state.sections.length > 0 && (
                 <textarea
                   className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
-                  style={{ height: '70vh', width: '100%' }}
+                  style={{ height: '75vh', width: '100%', resize: 'none' }}
                   value={state.value}
                   onChange={(e) => {
                     if (state.focusedSection !== null) {
@@ -160,9 +203,11 @@ function App() {
               )}
             </section>
           </div>
+
+          {/* markdown previewer */}
           <div className='px-3 flex-1'>
             <div
-              style={{ height: '70vh', width: '100%' }}
+              style={{ height: '75vh', width: '100%' }}
               className='border border-gray-500 rounded-md p-6 preview bg-white full-screen overflow-y-scroll w-full'
             >
               {togglePreview === true ? (
@@ -171,6 +216,7 @@ function App() {
                   className='full-screen'
                 />
               ) : (
+                // output area
                 <div
                   className='full-screen w-full p-4'
                   style={{ height: '70vh' }}
