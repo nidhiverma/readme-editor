@@ -8,3 +8,4 @@ Readme Editor is an application for fast and easy creation of Github Readme file
 - Remove Section
 - Update Section
 - Download Readme
+

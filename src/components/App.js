@@ -141,18 +141,30 @@ function App() {
                 width: '100%',
                 height: '70vh',
               }}
-              className='rounded-sm border border-gray-500'
+              // className='rounded-sm border border-gray-500'
             >
-              <textarea
-                className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
-                style={{ height: '70vh', width: '100%' }}
-                value={state.value}
-                onChange={(e) => {
-                  dispatch({ type: 'updateValue', payload: e.target.value });
-                  dispatch({ type: 'updateSection' });
-                  dispatch({ type: 'updateOutput' });
-                }}
-              />
+              {state.focusedSection === null && (
+                <p className='text-blue-700 text-center'>
+                  Select a section from the left sidebar to edit the contents{' '}
+                </p>
+              )}
+              {state.focusedSection && (
+                <textarea
+                  className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
+                  style={{ height: '70vh', width: '100%' }}
+                  value={state.value}
+                  onChange={(e) => {
+                    if (state.focusedSection !== null) {
+                      dispatch({
+                        type: 'updateValue',
+                        payload: e.target.value,
+                      });
+                      dispatch({ type: 'updateSection' });
+                      dispatch({ type: 'updateOutput' });
+                    }
+                  }}
+                />
+              )}
             </section>
           </div>
           <div className='px-3 flex-1'>
