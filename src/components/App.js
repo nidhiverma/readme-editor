@@ -36,15 +36,15 @@ function App() {
   return (
     <Fragment>
       <Header markdown={state.sectionsArray} />
-      <div className='flex pt-6 px-6'>
-        <div className='w-80'>
+      <div className='flex pt-6 px-6 gap-10'>
+        <div className='w-60'>
           <h3 className='text-blue-600 font-semibold'>Sections</h3>
           <h4 className=' text-xs leading-6 text-gray-900'>
             Click on a section below to edit the contents
           </h4>
         </div>
         <div className='flex flex-1'>
-          <div className='w-1/2 px-3'>
+          <div className='w-1/2'>
             <h3 className='text-blue-600 font-semibold'>Editor</h3>
           </div>
           <div className='px-3'>
@@ -63,7 +63,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='flex p-6'>
+      <div className='flex p-6 gap-10'>
         <div className='sections w-60' style={{ height: '70vh' }}>
           <div
             className='px-3 pr-4 overflow-y-auto full-screen'
