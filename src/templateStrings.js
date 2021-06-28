@@ -103,7 +103,7 @@ npm start
   screenshots: `# Screenshots
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)`,
 
-  logo: `![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)`,
+  logo: `![logo](https://www.dropbox.com/s/nk3aoqhh058iepd/logo.png?raw=1)`,
 };
 
 export default strings;
