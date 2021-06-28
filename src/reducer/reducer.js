@@ -13,33 +13,33 @@ export default function stateReducer(state, action) {
     case 'addSection':
       return {
         ...state,
-        sectionsArray: [...state.sectionsArray, state.value],
-        sections: [...state.sections, state.focusedSection],
+        selectedSectionsStrings: [...state.selectedSectionsStrings, state.value],
+        selectedSections: [...state.selectedSections, state.focusedSection],
       };
     case 'removeSection':
       return {
         ...state,
-        sectionsArray: [
-          ...state.sectionsArray.slice(0, action.payload),
-          ...state.sectionsArray.slice(action.payload + 1),
+        selectedSectionsStrings: [
+          ...state.selectedSectionsStrings.slice(0, action.payload),
+          ...state.selectedSectionsStrings.slice(action.payload + 1),
         ],
-        sections: [
-          ...state.sections.slice(0, action.payload),
-          ...state.sections.slice(action.payload + 1),
+        selectedSections: [
+          ...state.selectedSections.slice(0, action.payload),
+          ...state.selectedSections.slice(action.payload + 1),
         ],
       };
     case 'updateSection':
-      let index = state.sections.indexOf(state.focusedSection);
-      let arr = state.sectionsArray.slice(0, index);
+      let index = state.selectedSections.indexOf(state.focusedSection);
+      let arr = state.selectedSectionsStrings.slice(0, index);
       arr.push(state.value);
       return {
         ...state,
-        sectionsArray: [...arr, ...state.sectionsArray.slice(index + 1)],
+        selectedSectionsStrings: [...arr, ...state.selectedSectionsStrings.slice(index + 1)],
       };
     case 'updateOutput':
       return {
         ...state,
-        output: state.sectionsArray.join('\n'),
+        output: state.selectedSectionsStrings.join('\n'),
       };
 
     default:
