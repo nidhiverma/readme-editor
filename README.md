@@ -9,3 +9,6 @@ Readme Editor is an application for fast and easy creation of Github Readme file
 - Update Section
 - Download Readme
 
+## Preview
+
+![logo](https://www.dropbox.com/s/p0hdcg7aqhmj6u5/preview.png?raw=1)
