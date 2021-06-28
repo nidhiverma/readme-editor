@@ -106,17 +106,13 @@ function App() {
                       className='focus:outline-none outline-none'
                       onClick={() => {
                         let index = state.selectedSections.indexOf(section);
-
+                        // console.log(index);
                         dispatch({
                           type: 'removeSection',
                           payload: index,
                         });
                         dispatch({
                           type: 'updateOutput',
-                        });
-                        dispatch({
-                          type: 'updateValue',
-                          payload: null,
                         });
                       }}
                     >
@@ -177,12 +173,12 @@ function App() {
                 height: '75vh',
               }}
             >
-              {state.selectedSections.length === 0 && (
+              {state.selectedSections.length === 0 ||
+              state.selectedSections.indexOf(state.focusedSection) === -1 ? (
                 <p className='mx-auto text-blue-500 text-center'>
                   Select a section from the left sidebar to edit the contents{' '}
                 </p>
-              )}
-              {state.selectedSections.length > 0 && (
+              ) : (
                 <textarea
                   className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
                   style={{ height: '75vh', width: '100%', resize: 'none' }}
