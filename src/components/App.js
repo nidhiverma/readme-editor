@@ -1,4 +1,4 @@
-import { Fragment, useReducer, useState } from 'react';
+import { Fragment, useReducer, useState, useEffect } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import { Header } from './Header';
 import templateStrings from '../templateStrings';
@@ -7,9 +7,9 @@ import stateReducer from '../reducer/reducer';
 function App() {
   const initialState = {
     value: '',
-    sectionsArray: [],
+    selectedSectionsStrings: [],
     output: '',
-    sections: [],
+    selectedSections: [],
     focusedSection: null,
   };
 
@@ -33,9 +33,13 @@ function App() {
   const [togglePreview, setTogglePreview] = useState(true);
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   return (
     <Fragment>
-      <Header markdown={state.sectionsArray} />
+      <Header markdown={state.selectedSectionsStrings} />
       {/* section headers */}
       <div className='flex pt-6 px-6 gap-10'>
         <div className='w-60'>
@@ -65,59 +69,62 @@ function App() {
       {/* section content */}
       <div className='flex p-6 gap-10 align-center'>
         <div
-          className='sections w-60 overflow-y-auto full-screen'
+          className='section w-60 overflow-y-auto full-screen'
           style={{ height: '75vh' }}
         >
           {/* selected sections */}
           <div className='pr-3'>
-            {state.sections.length > 0 && (
+            {state.selectedSections.length > 0 && (
               <h4 className=' text-xs leading-6 text-gray-900'>
                 Click on a section below to edit the contents
               </h4>
             )}
             <ul className='mt-4 mb-12 space-y-3'>
-              {Object.keys(sectionTitles)
-                .sort()
-                .map((key, id) => (
-                  <li key={id}>
-                    {state.sections.includes(key) && (
-                      <div
-                        className={`flex flex-wrap justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer ml-1 ${
-                          state.focusedSection === key ? 'ring-2' : ''
-                        }`}
-                        onClick={() => {
-                          dispatch({
-                            type: 'setFocusedSection',
-                            payload: key,
-                          });
-                          dispatch({
-                            type: 'updateValue',
-                            payload: templateStrings[key],
-                          });
-                        }}
-                      >
-                        <span>{sectionTitles[key]}</span>
+              {state.selectedSections.map((section, key) => (
+                <li key={key}>
+                  <div
+                    className={`flex flex-wrap justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer ml-1 ${
+                      state.focusedSection === section ? 'ring-2' : ''
+                    }`}
+                    onClick={() => {
+                      dispatch({
+                        type: 'setFocusedSection',
+                        payload: section,
+                      });
+                      dispatch({
+                        type: 'updateValue',
+                        payload:
+                          state.selectedSectionsStrings[
+                            state.selectedSections.indexOf(section)
+                          ],
+                      });
+                    }}
+                  >
+                    <span>{sectionTitles[section]}</span>
 
-                        <button
-                          className='focus:outline-none outline-none'
-                          onClick={() => {
-                            let index = state.sections.indexOf(key);
+                    <button
+                      className='focus:outline-none outline-none'
+                      onClick={() => {
+                        let index = state.selectedSections.indexOf(section);
 
-                            dispatch({
-                              type: 'removeSection',
-                              payload: index,
-                            });
-                            dispatch({
-                              type: 'updateOutput',
-                            });
-                          }}
-                        >
-                          <i className='fas fa-trash'></i>
-                        </button>
-                      </div>
-                    )}
-                  </li>
-                ))}
+                        dispatch({
+                          type: 'removeSection',
+                          payload: index,
+                        });
+                        dispatch({
+                          type: 'updateOutput',
+                        });
+                        dispatch({
+                          type: 'updateValue',
+                          payload: null,
+                        });
+                      }}
+                    >
+                      <i className='fas fa-trash'></i>
+                    </button>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -131,7 +138,7 @@ function App() {
                 .sort()
                 .map((key, id) => (
                   <li key={id}>
-                    {!state.sections.includes(key) && (
+                    {!state.selectedSections.includes(key) && (
                       <div
                         className='flex justify-between block w-full h-full py-2 px-3 bg-white rounded-md shadow cursor-pointer focus:outline-none bg-gray-100 ml-1 text-gray'
                         onClick={() => {
@@ -139,23 +146,14 @@ function App() {
                             type: 'setFocusedSection',
                             payload: key,
                           });
-                          let index = state.sections.indexOf(key);
-
-                          if (index === -1) {
-                            dispatch({
-                              type: 'updateValue',
-                              payload: templateStrings[key],
-                            });
-                            dispatch({
-                              type: 'addSection',
-                            });
-                            dispatch({ type: 'updateOutput' });
-                          } else {
-                            dispatch({
-                              type: 'updateValue',
-                              payload: templateStrings[key],
-                            });
-                          }
+                          dispatch({
+                            type: 'updateValue',
+                            payload: templateStrings[key],
+                          });
+                          dispatch({
+                            type: 'addSection',
+                          });
+                          dispatch({ type: 'updateOutput' });
                         }}
                       >
                         <span>{sectionTitles[key]}</span>
@@ -179,12 +177,12 @@ function App() {
                 height: '75vh',
               }}
             >
-              {state.sections.length === 0 && (
+              {state.selectedSections.length === 0 && (
                 <p className='mx-auto text-blue-500 text-center'>
                   Select a section from the left sidebar to edit the contents{' '}
                 </p>
               )}
-              {state.sections.length > 0 && (
+              {state.selectedSections.length > 0 && (
                 <textarea
                   className='rounded-sm border border-gray-500 full-screen w-full bg-gray-800 text-white p-4'
                   style={{ height: '75vh', width: '100%', resize: 'none' }}
@@ -221,7 +219,7 @@ function App() {
                   className='full-screen w-full p-4'
                   style={{ height: '70vh' }}
                 >
-                  {state.sectionsArray.map((section, idx) => (
+                  {state.selectedSectionsStrings.map((section, idx) => (
                     <div key={idx}>
                       {section.split('\n').map((line, idx) => (
                         <p key={idx}>
@@ -232,6 +230,7 @@ function App() {
                       <br />
                     </div>
                   ))}
+                  /
                 </div>
               )}
             </div>
