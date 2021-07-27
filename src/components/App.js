@@ -226,7 +226,6 @@ function App() {
                       <br />
                     </div>
                   ))}
-                  /
                 </div>
               )}
             </div>
