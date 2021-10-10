@@ -126,7 +126,7 @@ function App() {
 
           {/* sections list */}
           <h4 className=' text-xs leading-6 text-gray-900'>
-            Click on a section below to add it to readme
+            Click on a section below to add it to Readme
           </h4>
           <div className='pr-3 pr-4 '>
             <ul className='mt-4 mb-12 space-y-3'>
